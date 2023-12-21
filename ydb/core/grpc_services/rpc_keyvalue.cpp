@@ -818,7 +818,7 @@ protected:
         auto &rec = *this->GetProtoRequest();
         CopyProtobuf(rec, &req->Record);
         req->Record.set_tablet_id(KVTabletId);
-        NTabletPipe::SendData(this->SelfId(), KVPipeClient, req.release(), 0);
+        NTabletPipe::SendData(this->SelfId(), KVPipeClient, req.release(), 0, TBase::Request().GetWilsonTraceId());
     }
 
     void Handle(typename TKVRequest::TResponse::TPtr &ev) {
