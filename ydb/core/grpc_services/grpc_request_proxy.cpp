@@ -420,6 +420,9 @@ void TGRpcRequestProxyImpl::MaybeStartTracing(IRequestProxyCtx& ctx) {
     TracingControl->HandleTracing(traceId, ctx.GetRequestDiscriminator());
     if (traceId) {
         NWilson::TSpan grpcRequestProxySpan(TWilsonGrpc::RequestProxy, std::move(traceId), "GrpcRequestProxy");
+        if (auto msg = ctx.GetMessage()) {
+            grpcRequestProxySpan.Attribute("request_type", msg->GetDescriptor()->full_name());
+        }
         ctx.StartTracing(std::move(grpcRequestProxySpan));
     }
 }

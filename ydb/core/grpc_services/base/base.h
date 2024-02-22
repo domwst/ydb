@@ -382,6 +382,10 @@ public:
         return NJaegerTracing::TRequestDiscriminator::EMPTY;
     };
 
+    virtual const google::protobuf::Message* GetMessage() const {
+        return nullptr;
+    }
+
     // validation
     virtual bool Validate(TString& error) = 0;
 
@@ -1428,6 +1432,10 @@ public:
             this->RaiseIssue(NYql::TIssue{TStringBuilder() << "unexpected exception: " << ex.what()});
             this->ReplyWithYdbStatus(Ydb::StatusIds::INTERNAL_ERROR);
         }
+    }
+
+    const google::protobuf::Message* GetMessage() const override {
+        return TBase::GetRequest();
     }
 
     TRateLimiterMode GetRlMode() const override {
